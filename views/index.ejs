@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phone Diary</title>
+
+    <style>
+        /* Your existing CSS styles */
+        #new_form input[type="text"],input[type="tel"],input[type="email"]{
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+        }
+
+        .left-panel,
+        .right-panel {
+            margin-top: 5%;
+            width: 50%;
+            background-color: #f0f0f0;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .show_name .name {
+            border: 5px solid black;
+            border-radius: 70px;
+            display: flex;
+            height: 75px;
+            margin-top: 30px;
+            background-color: gray;
+            cursor: pointer;
+        }
+
+        .show_name .name h3 {
+            font-size: x-large;
+            padding-left: 20px;
+            margin: auto 0;
+        }
+
+        /* New styles for the right panel */
+        .right-panel {
+            position: fixed;
+            margin-top: 80px;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #f0f0f0;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        /* Styles for the add button */
+        .add-button {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            padding: 0;
+            cursor: pointer;
+            position: fixed;
+            bottom: 20px;
+            left: 650px;
+            outline: none;
+            background-color: #808080;
+            color: #fff;
+            font-weight: bold;
+            display: inline-block;
+            margin: 0 10px;
+            line-height: 50px;
+            text-align: center; /* Center text */
+        }
+        .custom-form {
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+   
+}
+
+       
+
+.custom-form label {
+    font-weight: bold;
+   
+}
+
+.custom-form input[type="text"] ,input[type="email"] , input[type="tel"]{
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+
+.custom-form button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #808080;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+
+    </style>
+</head>
+
+<body style="margin: 0;padding: 0;background-color: #f0f0f0;">
+    <!-- Include the header -->
+    <div class="head">
+        <%- include('header') %>
+    </div>
+
+    <!-- Container of storing both left and right frame -->
+    <div class="container">
+        <!-- Left Container -->
+        <div class="left-panel" id="leftPanel">
+            <div class="show_name">
+              <% if (arr.length === 0) { %>
+                <p>No contacts available. Click the Add button to add a contact.</p>
+              <% } else { %>
+                <% for (let i=0; i <=((arr.length)-1); i++) { %>
+                  <div class="name" onclick="showDetails('<%= arr[i] %>', '<%= arr1[i] %>', '<%= arr2[i] %>')">
+                    <h3 class="nameList"><%= arr[i] %></h3>
+                  </div>
+                <% } %>
+              <% } %>
+            </div>
+          </div>
+          
+
+        <!-- Right Container -->
+        <div class="right-panel" id="rightPanel" style="border-left: 5px solid black;">
+            <!-- Initially empty -->
+           
+        </div>
+    </div>
+
+    
+    <!-- Add button to trigger loading of Form for adding contact -->
+    <button class="add-button" onclick="addForm()">Add</button>
+
+    <!-- Your JavaScript code here -->
+    <script>
+
+        document.getElementById("search").addEventListener("click", function(){
+console.log("Searching...");
+             // Get the container where the search result will be appended
+    var container = document.getElementById('leftPanel');
+    
+    // Create the fieldset element
+    var fieldset = document.createElement('fieldset');
+    
+    // Create the legend element
+    var legend = document.createElement('legend');
+    legend.textContent = 'Search Result';
+    
+    // Append the legend to the fieldset
+    fieldset.appendChild(legend);
+    
+    // Create the div element with class "show_name"
+    var divShowName = document.createElement('div');
+    divShowName.classList.add('show_name');
+    
+    // Iterate over the data array and create div elements dynamically
+    for (let i=0; i <=((Arr.length)-1); i++) { 
+        var divName = document.createElement('div');
+        divName.classList.add('name');
+        divName.style.backgroundColor = '#909090';
+        divName.style.height = '60px';
+        divName.onclick = function() {
+            showDetails(Arr[i],  Arr1[i], Arr2[i] );
+        };
+        
+        var h3NameList = document.createElement('h3');
+        h3NameList.classList.add('nameList');
+        h3NameList.textContent = Arr[i] ;
+        
+        divName.appendChild(h3NameList);
+        divShowName.appendChild(divName);
+     } 
+    
+    // Append the div with class "show_name" to the fieldset
+    fieldset.appendChild(divShowName);
+    
+    // Append the fieldset to the container  parentElement.insertBefore(childElement, firstChild);
+    container.insertBefore(fieldset,container.firstChild);
+        });
+
+
+
+
+       function showDetails(name, phone_no, email) {
+        document.getElementById('rightPanel').innerHTML = '';
+    var img = document.createElement("img");
+    img.onerror = function() {
+    console.error("Error loading image:", this.src);
+};
+    img.setAttribute("src","https://image.pngaaa.com/865/5389865-middle.png");
+    img.setAttribute("height","50px");
+    img.setAttribute("width","50px");
+    img.setAttribute("alt","EDIT");
+    img.onclick = function(){
+       nameInput.readOnly = false;
+       phoneInput.readOnly = false;
+       emailInput.readOnly = false;
+       nameInput.required = true;
+       phoneInput.required = true;
+   
+       phoneInput.setAttribute('pattern',"[6-9][0-9]{9}");
+
+       form.removeChild(deleteButton);
+       form.appendChild(updateButton);
+       
+    }
+   
+    var form = document.createElement('form');
+    form.setAttribute('id', 'new_form');
+    form.setAttribute('method', 'post');
+    form.setAttribute('action', '/delete');
+  
+    var nameLabel = document.createElement('label');
+    nameLabel.setAttribute('for', 'name');
+    nameLabel.textContent = 'Name:';
+    nameLabel.setAttribute('contenteditable', 'false');
+
+    var nameInput = document.createElement('input');
+    nameInput.setAttribute('id', 'Name');
+    nameInput.setAttribute('name', 'Name');
+    nameInput.setAttribute('type', 'text');
+    nameInput.setAttribute('value', name);
+    nameInput.readOnly = true;
+
+    var Name = document.createElement('input');
+    Name.setAttribute('type', 'hidden');
+    Name.setAttribute('id', 'name');
+    Name.setAttribute('name', 'name');
+    Name.setAttribute('value',name);
+
+    var phoneLabel = document.createElement('label');
+    phoneLabel.setAttribute('for', 'phone');
+    phoneLabel.textContent = 'Phone No:';
+
+    var phoneInput = document.createElement('input');
+    phoneInput.setAttribute('type', 'tel');
+    phoneInput.setAttribute('id', 'Phone');
+    phoneInput.setAttribute('name', 'Phone');
+    phoneInput.setAttribute('value',phone_no);
+    phoneInput.readOnly = true;
+
+    var Phone = document.createElement('input');
+    Phone.setAttribute('type', 'hidden');
+    Phone.setAttribute('id', 'phone');
+    Phone.setAttribute('name', 'phone');
+    Phone.setAttribute('value', phone_no);
+
+
+    var emailLabel = document.createElement('label');
+    emailLabel.setAttribute('for', 'email');
+    emailLabel.textContent = 'Email:';
+
+    var emailInput = document.createElement('input');
+    emailInput.setAttribute('type', 'email');
+    emailInput.setAttribute('id', 'Email');
+    emailInput.setAttribute('name', 'Email');
+    emailInput.setAttribute('value', email);
+    emailInput.readOnly = true;
+
+    var deleteButton = document.createElement('button');
+    deleteButton.setAttribute('class', 'circle-button');
+    deleteButton.setAttribute('type', 'button');
+    deleteButton.textContent = 'DELETE';
+    deleteButton.addEventListener('click', function () {
+        const confirmation = confirm('Are you sure you want to delete?');
+            if (confirmation) {
+                document.getElementById('new_form').submit();
+            }
+});
+
+   var updateButton = document.createElement('button');
+   updateButton.setAttribute('class','circle-button');
+   updateButton.setAttribute('type', 'button');
+   updateButton.textContent = 'UPDATE';
+   updateButton.addEventListener('click', function(){
+    form.setAttribute('action', '/update');
+    setTimeout(function() {
+    document.getElementById('new_form').submit();
+  }, 10);
+   });
+   
+
+
+
+  document.getElementById('rightPanel').appendChild(img);
+    // Append form elements to the form
+    form.appendChild(nameLabel);
+    form.appendChild(nameInput);
+    form.appendChild(Name);
+    form.appendChild(document.createElement('br'));
+    form.appendChild(phoneLabel);
+    form.appendChild(phoneInput);
+    form.appendChild(Phone);
+    form.appendChild(document.createElement('br'));
+    form.appendChild(emailLabel);
+    form.appendChild(emailInput);
+    form.appendChild(document.createElement('br'));
+    form.appendChild(deleteButton);
+   
+
+    // Append form to the right panel
+    document.getElementById('rightPanel').appendChild(form);
+
+    
+}
+
+
+        function addForm() {
+    // Clear existing content in the right panel
+    document.getElementById('rightPanel').innerHTML = '';
+
+    // Create form elements dynamically
+    var form = document.createElement('form');
+    form.setAttribute('action', '/process');
+    form.setAttribute('method', 'post');
+    form.setAttribute('class', 'custom-form'); // Adding a class for styling
+
+    var nameLabel = document.createElement('label');
+    nameLabel.setAttribute('for', 'name');
+    nameLabel.textContent = 'Name:';
+
+    var nameInput = document.createElement('input');
+    nameInput.setAttribute('type', 'text');
+    nameInput.setAttribute('id', 'name');
+    nameInput.setAttribute('name', 'name');
+    nameInput.setAttribute('placeholder', 'Enter your name');
+    nameInput.required = true;
+
+    var phoneLabel = document.createElement('label');
+    phoneLabel.setAttribute('for', 'phone');
+    phoneLabel.textContent = 'Phone No:';
+
+    var phoneInput = document.createElement('input');
+    phoneInput.setAttribute('type', 'tel');
+    phoneInput.setAttribute('id', 'phone');
+    phoneInput.setAttribute('name', 'phone');
+    phoneInput.setAttribute('placeholder', 'Enter your phone number');
+    phoneInput.setAttribute('pattern', "[7-9][0-9]{9}");
+    phoneInput.required = true;
+
+    var emailLabel = document.createElement('label');
+    emailLabel.setAttribute('for', 'email');
+    emailLabel.textContent = 'Email:';
+
+    var emailInput = document.createElement('input');
+    emailInput.setAttribute('type', 'email');
+    emailInput.setAttribute('id', 'email');
+    emailInput.setAttribute('name', 'email');
+    emailInput.setAttribute('placeholder', 'Enter your email address');
+  
+
+    var addButton = document.createElement('button');
+    addButton.setAttribute('class', 'circle-button');
+    addButton.setAttribute('type', 'submit');
+    addButton.textContent = 'ADD';
+
+    // Append form elements to the form
+    form.appendChild(nameLabel);
+    form.appendChild(nameInput);
+    form.appendChild(document.createElement('br'));
+    form.appendChild(phoneLabel);
+    form.appendChild(phoneInput);
+    form.appendChild(document.createElement('br'));
+    form.appendChild(emailLabel);
+    form.appendChild(emailInput);
+    form.appendChild(document.createElement('br'));
+    form.appendChild(addButton);
+
+    // Append form to the right panel
+    document.getElementById('rightPanel').appendChild(form);
+}
+
+    </script>
+</body>
+
+</html>
